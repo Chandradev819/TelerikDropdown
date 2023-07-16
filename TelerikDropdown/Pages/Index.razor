@@ -1,0 +1,87 @@
+﻿@page "/"
+
+<p>Category</p>
+<TelerikComboBox Value="@Currentproduct.CategoryId"
+                 Data="@Categories"
+                 Placeholder="Select Category"
+                 TextField="CategoryName" ValueField="CategoryId" Filterable="true"
+                 ValueChanged="@( (int? c) => CategorySelected(c) )">
+</TelerikComboBox>
+
+
+<br />
+<br />
+<p>Product</p>
+<TelerikComboBox Value="@Currentproduct.ProductId" Data="@CurrentProducts"
+                 Placeholder="Select Product" Filterable="true"
+                 TextField="ProductName" ValueField="ProductId"
+                 Enabled="@( Currentproduct.CategoryId > 0 )">
+</TelerikComboBox>
+
+<p>Selected CategoryId:@Currentproduct.CategoryId </p>
+<p>Selected CategoryName:@Currentproduct.CategoryName</p>
+
+
+@code {
+    // data sources
+    List<Category> Categories { get; set; }
+    List<Product> AllProducts { get; set; }
+    List<Product> CurrentProducts { get; set; }
+    List<int> Quantities { get; set; }
+    // model
+    Product Currentproduct { get; set; } = new Product();
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        Categories = Enumerable.Range(1, 6).Select(x => new Category
+            {
+                CategoryId = x,
+                CategoryName = $"CategoryCategory {x}"
+            }).ToList();
+
+        AllProducts = Enumerable.Range(1, 50).Select(x => new Product
+            {
+                ProductId = x,
+                ProductName = $"Product {x}",
+                CategoryId = (int)Math.Ceiling((double)x % 7)
+            }).ToList();
+    }
+
+    //ValueChanged handlers - for cascading comboBox
+    void CategorySelected(int? category)
+    {
+        // the default value - the user selected the default item == deselected the current item
+        if (category == null)
+        {
+            //reset the "form" / process
+            Currentproduct = new Product();
+            return;
+        }
+
+        // cascade the selection by filtering the data for the next dropdown
+        CurrentProducts = AllProducts.Where(p => p.CategoryId == category).ToList();
+
+        // get the selected model from the data source
+        Category SelectedCategory = Categories.Where(c => c.CategoryId == category).First();
+
+        // business logic
+        Currentproduct.CategoryId = SelectedCategory.CategoryId;
+        Currentproduct.CategoryName = SelectedCategory.CategoryName;
+    }
+
+    public class Category
+    {
+        public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
+    }
+
+    public class Product
+    {
+        public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public int ProductId { get; set; }
+        public string ProductName { get; set; }
+    }
+}

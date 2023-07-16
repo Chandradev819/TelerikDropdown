@@ -1,0 +1,32 @@
+﻿@page "/fetchdata"
+<TelerikDropDownList Data="@DropDownData" Width="@DropDownWidth"
+                     Value="@DropDownValue"
+                     ValueChanged="@( (string newValue) => OnDropDownValueChanged(newValue) )">
+</TelerikDropDownList>
+
+@code {
+    private List<string> DropDownData { get; set; } = new List<string> {
+        "Manager", "Developer", "QA", "This is Technical Writer", "Support Engineer"
+    };
+
+    private string DropDownValue { get; set; } = "Developer";
+    private string DropDownWidth { get; set; } = "125px";
+
+    private void OnDropDownValueChanged(string newValue)
+    {
+        DropDownValue = newValue;
+        AdjustDropDownWidth(newValue);
+    }
+    private void AdjustDropDownWidth(string selectedText)
+    {
+        int textWidth = GetTextWidth(selectedText);
+        int minWidth = 125; // Minimum width for the DropDownList
+        int width = Math.Max(textWidth, minWidth);
+        DropDownWidth = width + "px";
+    }
+
+    private int GetTextWidth(string text)
+    {
+        return text?.Length * 10 ?? 0;
+    }
+}
