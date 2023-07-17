@@ -10,8 +10,7 @@
         <StepperStep Template="@CreateTemplate(Cool, "Cool")" />
         <StepperStep Template="@CreateTemplate(Love, "Love")" />
         <StepperStep Template="@CreateTemplate(Fear, "Fear")" />
-        <StepperStep Template="@CreateDropdown()" />
-
+     @*   <StepperStep Template="@CreateDropdown()" />*@
     </StepperSteps>
 </TelerikStepper>
 
@@ -19,14 +18,14 @@
 
     public int CurrentStepIndex { get; set; } = 4;
 
-    RenderFragment CreateDropdown()
-    {
-        return
-    @<text>
-        <TelerikDropDownList Data="@myDdlData" TextField="MyTextField" ValueField="MyValueField" @bind-Value="selectedValue">
-        </TelerikDropDownList>
-    </text>;
-    }
+    //RenderFragment CreateDropdown()
+    //{
+    //    return
+    //@<text>
+    //    <TelerikDropDownList Data="@myDdlData" TextField="MyTextField" ValueField="MyValueField" @bind-Value="selectedValue">
+    //    </TelerikDropDownList>
+    //</text>;
+    //}
 
 
     RenderFragment CreateTemplate(string emoji, string label)
@@ -37,6 +36,8 @@
             <span style="font-size:20px">@emoji</span>
         </div>
         <span class="step-label">@label</span>
+        <TelerikDropDownList Data="@myDdlData" TextField="MyTextField" ValueField="MyValueField" @bind-Value="selectedValue">
+        </TelerikDropDownList>
     </text>;
     }
 
