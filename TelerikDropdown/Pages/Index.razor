@@ -1,87 +1,104 @@
 ﻿@page "/"
 
-<p>Category</p>
-<TelerikComboBox Value="@Currentproduct.CategoryId"
-                 Data="@Categories"
-                 Placeholder="Select Category"
-                 TextField="CategoryName" ValueField="CategoryId" Filterable="true"
-                 ValueChanged="@( (int? c) => CategorySelected(c) )">
-</TelerikComboBox>
-
-
+<b>Selected value:</b> @selectedValue
 <br />
-<br />
-<p>Product</p>
-<TelerikComboBox Value="@Currentproduct.ProductId" Data="@CurrentProducts"
-                 Placeholder="Select Product" Filterable="true"
-                 TextField="ProductName" ValueField="ProductId"
-                 Enabled="@( Currentproduct.CategoryId > 0 )">
-</TelerikComboBox>
 
-<p>Selected CategoryId:@Currentproduct.CategoryId </p>
-<p>Selected CategoryName:@Currentproduct.CategoryName</p>
+<TelerikStepper @bind-Value="@CurrentStepIndex">
+    <StepperSteps>
+        <StepperStep Template="@CreateTemplate(Happy, "Happy")" />
+        <StepperStep Template="@CreateTemplate(Angry, "Angry")" />
+        <StepperStep Template="@CreateTemplate(Cool, "Cool")" />
+        <StepperStep Template="@CreateTemplate(Love, "Love")" />
+        <StepperStep Template="@CreateTemplate(Fear, "Fear")" />
+        <StepperStep Template="@CreateDropdown()" />
 
+    </StepperSteps>
+</TelerikStepper>
 
 @code {
-    // data sources
-    List<Category> Categories { get; set; }
-    List<Product> AllProducts { get; set; }
-    List<Product> CurrentProducts { get; set; }
-    List<int> Quantities { get; set; }
-    // model
-    Product Currentproduct { get; set; } = new Product();
 
-    protected override void OnInitialized()
+    public int CurrentStepIndex { get; set; } = 4;
+
+    RenderFragment CreateDropdown()
     {
-        base.OnInitialized();
-
-        Categories = Enumerable.Range(1, 6).Select(x => new Category
-            {
-                CategoryId = x,
-                CategoryName = $"CategoryCategory {x}"
-            }).ToList();
-
-        AllProducts = Enumerable.Range(1, 50).Select(x => new Product
-            {
-                ProductId = x,
-                ProductName = $"Product {x}",
-                CategoryId = (int)Math.Ceiling((double)x % 7)
-            }).ToList();
+        return
+    @<text>
+        <TelerikDropDownList Data="@myDdlData" TextField="MyTextField" ValueField="MyValueField" @bind-Value="selectedValue">
+        </TelerikDropDownList>
+    </text>;
     }
 
-    //ValueChanged handlers - for cascading comboBox
-    void CategorySelected(int? category)
+
+    RenderFragment CreateTemplate(string emoji, string label)
     {
-        // the default value - the user selected the default item == deselected the current item
-        if (category == null)
-        {
-            //reset the "form" / process
-            Currentproduct = new Product();
-            return;
+        return
+    @<text>
+        <div class="custom-step">
+            <span style="font-size:20px">@emoji</span>
+        </div>
+        <span class="step-label">@label</span>
+    </text>;
+    }
+
+    string Happy = char.ConvertFromUtf32(0x1F600);
+    string Angry = char.ConvertFromUtf32(0x1F620);
+    string Cool = char.ConvertFromUtf32(0x1F60E);
+    string Love = char.ConvertFromUtf32(0x1F60D);
+    string Fear = char.ConvertFromUtf32(0x1F628);
+
+
+    public class MyDdlModel
+    {
+        public int MyValueField { get; set; }
+        public string MyTextField { get; set; }
+    }
+
+    int selectedValue { get; set; }
+
+    IEnumerable<MyDdlModel> myDdlData = Enumerable.Range(1, 20).Select(x => new MyDdlModel { MyTextField = "item " + x, MyValueField = x });
+
+}
+
+<style>
+    .custom-stepper .k-progressbar {
+        height: 4px;
+        top: 18px;
+    }
+
+        .custom-stepper .k-progressbar .k-selected {
+            background: linear-gradient(to right, #ffc837, #ff8008);
         }
 
-        // cascade the selection by filtering the data for the next dropdown
-        CurrentProducts = AllProducts.Where(p => p.CategoryId == category).ToList();
-
-        // get the selected model from the data source
-        Category SelectedCategory = Categories.Where(c => c.CategoryId == category).First();
-
-        // business logic
-        Currentproduct.CategoryId = SelectedCategory.CategoryId;
-        Currentproduct.CategoryName = SelectedCategory.CategoryName;
+    .custom-step {
+        width: 40px;
+        height: 40px;
+        border: 2px solid #ff8008;
+        border-radius: 10px;
+        background-clip: padding-box;
+        border-radius: 10px;
+        box-sizing: border-box;
+        text-align: center;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #fff;
     }
 
-    public class Category
-    {
-        public int CategoryId { get; set; }
-        public string CategoryName { get; set; }
+    .k-step-done .custom-step {
+        background-image: radial-gradient(circle at center, #ffC837 10px, #ff8008);
     }
 
-    public class Product
-    {
-        public int CategoryId { get; set; }
-        public string CategoryName { get; set; }
-        public int ProductId { get; set; }
-        public string ProductName { get; set; }
+    .k-step:not(.k-step-done):not(.k-step-current) .custom-step {
+        border: 2px solid #ccc;
     }
-}
+
+    .k-step-link .k-icon {
+        font-size: 24px;
+        color: #000;
+    }
+
+    .k-step-link .step-label {
+        color: #75240d;
+        font-weight: bold;
+    }
+</style>
