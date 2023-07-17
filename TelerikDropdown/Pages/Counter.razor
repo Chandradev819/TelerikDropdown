@@ -1,16 +1,22 @@
 ﻿@page "/counter"
 
-<h1>Counter</h1>
-
-<p>Current count: @currentCount</p>
-
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<TelerikDropDownList Data="@DropDownData" Width="auto" 
+                     Value="@DropDownValue" 
+                     ValueChanged="@( (string newValue) => OnDropDownValueChanged(newValue) )">
+                     <DropDownListSettings>
+                         <DropDownListPopupSettings Width="Auto"/>
+                     </DropDownListSettings>
+</TelerikDropDownList>
 
 @code {
-    int currentCount = 0;
+    private List<string> DropDownData { get; set; } = new List<string> {
+        "Manager", "Developer", "QA", "Technical Writer Technical Write", "Support Engineer"
+    };
 
-    void IncrementCount()
+    private string DropDownValue { get; set; } = "Developer";
+    private void OnDropDownValueChanged(string newValue)
     {
-        currentCount++;
+        DropDownValue = newValue;
     }
 }
+

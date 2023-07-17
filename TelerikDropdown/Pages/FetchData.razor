@@ -1,32 +1,57 @@
 ﻿@page "/fetchdata"
-<TelerikDropDownList Data="@DropDownData" Width="@DropDownWidth"
-                     Value="@DropDownValue"
-                     ValueChanged="@( (string newValue) => OnDropDownValueChanged(newValue) )">
-</TelerikDropDownList>
+@using Microsoft.AspNetCore.Components.Web
+<style>
+    .chip-container {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 5px;
+        border: 1px solid #ccc;
+        padding: 5px;
+        min-height: 36px;
+    }
+
+    .chip {
+        display: flex;
+        align-items: center;
+        background-color: #f0f0f0;
+        padding: 5px 8px;
+        border-radius: 16px;
+        font-size: 14px;
+    }
+
+    .chip-remove {
+        margin-left: 5px;
+        cursor: pointer;
+        color: #999;
+    }
+</style>
+
+<div class="chip-container">
+    @foreach (var chip in Chips)
+    {
+        <span class="chip">@chip<span class="chip-remove" @onclick="() => RemoveChip(chip)">&#x2715;</span></span>
+    }
+    <input type="text" @bind="@ChipValue" @onkeyup="AddChip" placeholder="Enter chips" />
+</div>
 
 @code {
-    private List<string> DropDownData { get; set; } = new List<string> {
-        "Manager", "Developer", "QA", "This is Technical Writer", "Support Engineer"
-    };
+    private string ChipValue { get; set; }
+    private List<string> Chips { get; set; } = new List<string>();
 
-    private string DropDownValue { get; set; } = "Developer";
-    private string DropDownWidth { get; set; } = "125px";
-
-    private void OnDropDownValueChanged(string newValue)
+    private void RemoveChip(string chip)
     {
-        DropDownValue = newValue;
-        AdjustDropDownWidth(newValue);
-    }
-    private void AdjustDropDownWidth(string selectedText)
-    {
-        int textWidth = GetTextWidth(selectedText);
-        int minWidth = 125; // Minimum width for the DropDownList
-        int width = Math.Max(textWidth, minWidth);
-        DropDownWidth = width + "px";
+        Chips.Remove(chip);
     }
 
-    private int GetTextWidth(string text)
+    private async Task AddChip(KeyboardEventArgs e)
     {
-        return text?.Length * 10 ?? 0;
+        if ((e.Key == "Enter" || e.Code == "NumpadEnter") && !string.IsNullOrWhiteSpace(ChipValue))
+        {
+            Chips.Add(ChipValue);
+            ChipValue = string.Empty;
+            await Task.Delay(1); 
+            await InvokeAsync(StateHasChanged);
+        }
     }
 }
