@@ -1,0 +1,66 @@
+﻿@page "/autosave"
+
+<BlazoredAutoSaveEditForm Id="form-one" Model="myFormModel" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <label for="exampleInputEmail1">First name</label>
+        <InputText @bind-Value="myFormModel.FirstName" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="exampleInputEmail1">Last name</label>
+        <InputText @bind-Value="myFormModel.LastName" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Address</label>
+        <InputText @bind-Value="myFormModel.Address" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Mobile Number</label>
+        <InputText @bind-Value="myFormModel.MobileNumber" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">City</label>
+        <InputText @bind-Value="myFormModel.City" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">State</label>
+        <InputText @bind-Value="myFormModel.State" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Country</label>
+        <InputText @bind-Value="myFormModel.Country" class="form-control" />
+    </div>
+
+    <button class="btn btn-primary" type="submit">Submit</button>
+</BlazoredAutoSaveEditForm>
+
+
+@code {
+    private MyFormModel myFormModel = new MyFormModel();
+
+    public class MyFormModel
+    {
+        [Required]
+        public string FirstName { get; set; }
+        [Required]
+        public string LastName { get; set; }
+        [Required]
+        public string Address { get; set; }
+        [Required]
+        public string MobileNumber { get; set; }
+        [Required]
+        public string City { get; set; }
+        [Required]
+        public string State { get; set; }
+        [Required]
+        public string Country { get; set; }
+    }
+
+    private void HandleValidSubmit()
+    {
+        Console.WriteLine($"Form Submitted For: {myFormModel.FirstName} {myFormModel.LastName}");
+        myFormModel = new MyFormModel();
+    }
+}

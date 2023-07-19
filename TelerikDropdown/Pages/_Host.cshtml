@@ -14,6 +14,19 @@
     
     	<link href="https://blazor.cdn.telerik.com/blazor/4.0.0/kendo-theme-default/swatches/default-ocean-blue.css" rel="stylesheet" type="text/css" />
 	<script src="https://blazor.cdn.telerik.com/blazor/4.0.0/telerik-blazor.min.js" defer></script>
+    <script>
+        var autoSaveTimer;
+
+        function startAutoSave() {
+            autoSaveTimer = setInterval(function () {
+                DotNet.invokeMethodAsync('TelerikDropdown', 'SaveEmployee');
+            }, 10000); // Auto-save every 5 seconds (adjust as needed).
+        }
+
+        function stopAutoSave() {
+            clearInterval(autoSaveTimer);
+        }
+    </script>
 
 </head>
 <body class="k-body">
