@@ -1,7 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using TelerikDropdown.Data;
+﻿using TelerikDropdown.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +7,6 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddTelerikBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
-builder.Services.AddScoped<EmployeeService>();
 
 var app = builder.Build();
 
