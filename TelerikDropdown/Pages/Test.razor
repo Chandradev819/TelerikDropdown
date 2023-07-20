@@ -1,0 +1,50 @@
+﻿<!-- Index.razor -->
+@page "/kk"
+
+<h3>Simple Div Container Example</h3>
+
+<button @onclick="ShowContainer">Show Container</button>
+
+@if (IsContainerVisible)
+{
+    <div class="container">
+        <p>This is a div container!</p>
+        <button @onclick="HandleOkClick">OK</button>
+        <button @onclick="HandleCancelClick">Cancel</button>
+    </div>
+}
+
+<style>
+    /* CSS styles for the container */
+    .container {
+        border: 1px solid #ccc;
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        margin-top: 5px;
+    }
+</style>
+
+@code {
+
+
+    private bool IsContainerVisible = false;
+
+    private void ShowContainer()
+    {
+        IsContainerVisible = true;
+    }
+
+    private void HandleOkClick()
+    {
+        // Handle the "OK" button click here
+        IsContainerVisible = false;
+    }
+
+    private void HandleCancelClick()
+    {
+        // Handle the "Cancel" button click here
+        IsContainerVisible = false;
+    }
+}

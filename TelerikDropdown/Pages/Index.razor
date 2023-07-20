@@ -1,23 +1,29 @@
 ﻿@page "/"
 
-<b>Selected value:</b> @selectedValue
-<br />
-
 <TelerikStepper @bind-Value="@CurrentStepIndex">
     <StepperSteps>
+        <StepperStep Template="@CreatePopupWindow()" />
         <StepperStep Template="@CreateTemplate(Happy, "Happy")" />
         <StepperStep Template="@CreateTemplate(Angry, "Angry")" />
         <StepperStep Template="@CreateTemplate(Cool, "Cool")" />
         <StepperStep Template="@CreateTemplate(Love, "Love")" />
         <StepperStep Template="@CreateTemplate(Fear, "Fear")" />
-     @*   <StepperStep Template="@CreateDropdown()" />*@
+       
     </StepperSteps>
 </TelerikStepper>
 
+@if (IsContainerVisible)
+{
+    <div class="container">
+        <p>This is a div container!</p>
+        <button @onclick="HandleOkClick">OK</button>
+        <button @onclick="HandleCancelClick">Cancel</button>
+    </div>
+}
+
 @code {
-
+  
     public int CurrentStepIndex { get; set; } = 4;
-
     RenderFragment CreateTemplate(string emoji, string label)
     {
         return
@@ -26,29 +32,56 @@
             <span style="font-size:20px">@emoji</span>
         </div>
         <span class="step-label">@label</span>
-        <TelerikDropDownList Data="@myDdlData" TextField="MyTextField" ValueField="MyValueField" @bind-Value="selectedValue">
-        </TelerikDropDownList>
     </text>;
     }
 
+    RenderFragment CreatePopupWindow()
+    {
+        return
+    @<text>
+        <button @onclick="ShowContainer">Complaince Review</button>
+    </text>;
+    }
     string Happy = char.ConvertFromUtf32(0x1F600);
     string Angry = char.ConvertFromUtf32(0x1F620);
     string Cool = char.ConvertFromUtf32(0x1F60E);
     string Love = char.ConvertFromUtf32(0x1F60D);
     string Fear = char.ConvertFromUtf32(0x1F628);
 
+    
+    private bool IsContainerVisible = false;
 
-    public class MyDdlModel
+    private void ShowContainer()
     {
-        public int MyValueField { get; set; }
-        public string MyTextField { get; set; }
+        IsContainerVisible = true;
     }
 
-    int selectedValue { get; set; }
+    private void HandleOkClick()
+    {
+        // Handle the "OK" button click here
+        IsContainerVisible = false;
+    }
 
-    IEnumerable<MyDdlModel> myDdlData = Enumerable.Range(1, 20).Select(x => new MyDdlModel { MyTextField = "item " + x, MyValueField = x });
+    private void HandleCancelClick()
+    {
+        // Handle the "Cancel" button click here
+        IsContainerVisible = false;
+    }
+
 
 }
+
+<style>
+    /* CSS styles for the container */
+    .container {
+        border: 1px solid #ccc;
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        margin-top: 5px;
+    }
+</style>
 
 <style>
     .custom-stepper .k-progressbar {
