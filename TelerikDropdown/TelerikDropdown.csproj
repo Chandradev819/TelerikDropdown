@@ -8,6 +8,7 @@
   
   <ItemGroup>
     <PackageReference Include="Telerik.UI.for.Blazor" Version="4.0.0" />
+    <PackageReference Include="vNext.BlazorComponents.FluentValidation" Version="1.1.1" />
   </ItemGroup>
   
   <ProjectExtensions><VisualStudio><UserProperties UseCdnSupport="True" /></VisualStudio></ProjectExtensions>

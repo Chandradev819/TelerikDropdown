@@ -8,7 +8,7 @@
         <StepperStep Template="@CreateTemplate(Cool, "Cool")" />
         <StepperStep Template="@CreateTemplate(Love, "Love")" />
         <StepperStep Template="@CreateTemplate(Fear, "Fear")" />
-       
+
     </StepperSteps>
 </TelerikStepper>
 
@@ -22,7 +22,7 @@
 }
 
 @code {
-  
+
     public int CurrentStepIndex { get; set; } = 4;
     RenderFragment CreateTemplate(string emoji, string label)
     {
@@ -39,7 +39,9 @@
     {
         return
     @<text>
-        <button @onclick="ShowContainer">Complaince Review</button>
+        <div style="border:1px; background-color:green;">
+            <button @onclick="ShowContainer">Complaince Review</button>
+        </div>
     </text>;
     }
     string Happy = char.ConvertFromUtf32(0x1F600);
@@ -48,7 +50,7 @@
     string Love = char.ConvertFromUtf32(0x1F60D);
     string Fear = char.ConvertFromUtf32(0x1F628);
 
-    
+
     private bool IsContainerVisible = false;
 
     private void ShowContainer()
@@ -80,6 +82,8 @@
         border-radius: 4px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         margin-top: 5px;
+        width: 200px;
+        float:left;
     }
 </style>
 
