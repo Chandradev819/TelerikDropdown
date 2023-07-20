@@ -1,7 +1,10 @@
 ﻿@page "/autosave"
+@using vNext.BlazorComponents.FluentValidation
 
 <BlazoredAutoSaveEditForm Id="form-one" Model="myFormModel" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator />
+     <FluentValidationValidator />
+    <ValidationSummary />
+
     <div class="form-group">
         <label for="exampleInputEmail1">First name</label>
         <InputText @bind-Value="myFormModel.FirstName" class="form-control" />
@@ -41,19 +44,19 @@
 
     public class MyFormModel
     {
-        [Required]
+     
         public string FirstName { get; set; }
-        [Required]
+     
         public string LastName { get; set; }
-        [Required]
+     
         public string Address { get; set; }
-        [Required]
+        
         public string MobileNumber { get; set; }
-        [Required]
+    
         public string City { get; set; }
-        [Required]
+      
         public string State { get; set; }
-        [Required]
+    
         public string Country { get; set; }
     }
 
